@@ -1,0 +1,108 @@
+
+<div style="margin-top: 5%; text-align: center;" id="participantContainer" class="participantContainer">
+
+    <h3>
+        La liste totale des utilisteurs
+        <small class="text-muted">avec tous leurs détails.</small>
+    </h3>
+    <br>
+      <br>
+<table id="example" class="table table-striped table-bordered" style="width:100%">
+    <thead>
+        <tr>
+            <th>Code</th>
+            <th>Nom d'utilisateur</th>
+            <th>Roles</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+         <tr *ngFor = "let user of users">
+            <td>{{user?.code}}</td>
+            <td>{{user?.login}}</td>
+            <td><span *ngFor = "let role of user.roles">{{role?.name}}&nbsp;</span></td>
+            <td><button (click)="onOpenModal(user, 'edit')" class="btn btn-outline-primary"><i class="fas fa-edit"></i></button>&nbsp;
+              <button (click)="onOpenModal(user, 'delete')" class="btn btn-outline-danger"><i class="fa fa-trash"></i></button></td>
+        </tr>
+    </tbody>
+    <tfoot>
+        <tr>
+            <th>Code</th>
+            <th>Nom d'utilisateur</th>
+            <th>Roles</th>
+            <th>Actions</th>
+        </tr>
+    </tfoot>
+</table>
+
+
+<div style="text-align: left;" class="modal fade bd-example-modal-lg" id="editUserModal" tabindex="-1" role="dialog" aria-labelledby="editUserModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+      <div class="modal-content">
+         <div class="modal-header">
+            <h5 class="modal-title" id="editUserModalLabel" style="font-weight: 700;">Modifier {{userEdit?.login}}</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+            </button>
+         </div>
+         <div class="modal-body">
+            <form #editForm="ngForm" >
+             <div class="form-row">
+                <div class="form-group col-md-6">
+                  <label for="firstName">Nom d'utilisateur</label>
+                  <input type="hidden" ngModel="{{userEdit?.code}}" name="code" class="form-control" id="code">
+                  <input  ngModel type="text" class="form-control" id="login" name="login" placeholder="Nom d'utilisateur" required>
+                </div>
+                <div class="form-group col-md-6">
+                  <label for="lastName">Mot de passe</label>
+                  <input  ngModel type="password" class="form-control" id="password" name="password"  required>
+                </div>
+              </div>
+
+             
+             <div class="form-row">
+                 <div class="form-group col-md-6">
+                   <label for="Sessions">Roles &nbsp;</label>
+                   <br>
+                   <select  data-live-search="true"  name="roles" ngModel id="roles" class="selectpicker form-control" multiple>
+                    <option value={{role?.id}} *ngFor = "let role of roles">{{role?.name}}</option>
+                  </select>
+                 </div>
+             </div>
+
+  
+            <div class="modal-footer">
+               <button  type="button" id="add-user-form" class="btn btn-secondary" data-dismiss="modal">Annuler</button>
+               <button (click)="OnEditUser(editForm.value)" class="btn btn-primary" >Enregistrer</button>
+            </div>
+            </form>
+         </div>
+      </div>
+    </div>
+  </div> 
+
+
+ <!-- Delete User Modal -->
+<div class="modal fade" id="deleteUserModal" tabindex="-1" role="dialog" aria-labelledby="deleteUserModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+     <div class="modal-content">
+        <div class="modal-header">
+           <h5 class="modal-title" id="deleteUserModalLabel">Supprimer un utilisteur</h5>
+           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+           <span aria-hidden="true">&times;</span>
+           </button>
+        </div>
+        <div class="modal-body">
+           <p>Voulez vous vraiment supprimer {{deleteUser?.login}} ?</p>
+           <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Non</button>
+              <button (click)="OnDeleteUser(deleteUser?.code)" class="btn btn-danger" data-dismiss="modal">Oui</button>
+           </div>
+        </div>
+     </div>
+  </div>
+</div>
+
+
+
+</div>

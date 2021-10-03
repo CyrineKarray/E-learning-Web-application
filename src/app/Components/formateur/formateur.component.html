@@ -1,0 +1,218 @@
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
+<div class="container" id="main-container">
+<div class="container" >
+   <div class="container">
+      <div class="row">
+          <div class="col-9">
+          <h2 class="h3 block-title">Liste des formateurs</h2>
+            <button class="btn btn-primary btn-lg " type="button" (click)="onOpenModal(null, 'add')" data-toggle="tooltip" data-placement="top" title="Add"><i class="fa fa-plus"></i> Ajouter un formateur</button>
+      </div>
+          <div class="col-3">
+    <form class="form-inline my-2 col-3 my-lg-0">
+      <input type="search" (ngModelChange)="searchFormateurs(key.value)" #key="ngModel" ngModel
+       name="key" id="searchName" class="form-control mr-sm-2" placeholder="Recherche ..." required>
+     </form>
+  </div>
+      </div>
+     </div>
+     <br>
+      <br>
+    <div class="row">
+        <div class="col-md-4"  *ngFor="let formateur of formateurs">
+            <div class="card user-card">
+                <div class="card-header">
+                    <h5>Profile</h5>
+                </div>
+                <div class="card-block">
+                    <div class="user-image">
+                        <img src="https://bootdey.com/img/Content/avatar/avatar6.png" class="img-radius" alt="User-Profile-Image">
+                    </div>
+                    <h6 class="f-w-600 m-t-25 m-b-10">{{formateur.firstName}} {{formateur.lastName}} </h6>
+                    <p class="text-muted">{{formateur.tel}}| {{formateur.email}} </p>
+                    <hr>
+                    <p class="text-muted m-t-15">{{formateur.type}}</p>
+                    <hr>
+                    <p class="text-muted m-t-15">{{formateur?.organisme?.libelle}}</p>
+                    <ul class="list-unstyled activity-leval">
+                        <li class="active"></li>
+                        <li class="active"></li>
+                        <li class="active"></li>
+                        <li class="active"></li>
+                        <li class="active"></li>
+                    </ul>
+                    <hr>
+                    <div class="plan-footer">
+                     <div class="row justify-content-center user-social-link">
+                         <ul class="list-inline m-0">
+
+                             <li class="list-inline-item">
+                                 <button class="btn btn-warning btn-lg btn-floating" type="button"  (click)="onOpenModal(formateur, 'edit')" data-toggle="tooltip" data-placement="top" title="Edit"><i class="fa fa-edit"></i></button>
+                             </li>
+                             <li class="list-inline-item">
+                                 <button class="btn btn-danger btn-lg btn-floating" type="button" (click)="onOpenModal(formateur, 'delete')" title="Delete"><i class="fas fa-trash"></i></button>
+                             </li>
+                         </ul>
+                     </div>
+              </div>
+                </div>
+            </div>
+        </div>
+	</div>
+</div>
+</div>
+
+<!-- Add Formateur Modal -->
+<div class="modal fade" id="addFormateurModal" tabindex="-1" formateurType="dialog" aria-labelledby="addFormateurModalLabel" aria-hidden="true">
+    <div class="modal-dialog" FormateurType="document">
+      <div class="modal-content">
+         <div class="modal-header">
+            <h5 class="modal-title" id="addFormateurModalLabel" style="font-weight: 700;">Ajouter un formateur</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+            </button>
+         </div>
+         <div class="modal-body">
+            <form  #addForm="ngForm" (ngSubmit)="onAddFormateur(addForm)">
+             <div class="form-row">
+                <div class="form-group col-md-6">
+                  <label for="firstName">Prénom</label>
+                  <input ngModel type="text" class="form-control" id="firstName" name="firstName" placeholder="Prénom" required>
+                </div>
+                <div class="form-group col-md-6">
+                  <label for="lastName">Nom</label>
+                  <input ngModel type="text" class="form-control" id="lastName" name="lastName" placeholder="Nom"  required>
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group col-md-6">
+                   <label for="tel">Numéro téléphone</label>
+                   <input ngModel type="text" class="form-control" id="tel" name="tel" placeholder="Numéro téléphoner" required>
+                 </div>
+                 <div class="form-group col-md-6">
+                   <label for="email">Email</label>
+                   <input  ngModel type="email" class="form-control" id="email" name="email" placeholder="email du formateur" required>
+                 </div>
+             </div>
+              <div class="form-row">
+                 <div class="form-group col-md-6">
+                    <label for="type">Type du formateur</label>
+                    <select ngModel id="type" name="type" class="form-control" required>
+                      <option>INTERNE</option>
+                      <option selected>EXTERNE</option>
+                    </select>
+                  </div>
+             </div>
+             <div class="form-row">
+               <div class="form-group col-md-9">
+                 <label for="organisme">Organisme</label>
+                 <select ngModel name="organisme" id="organisme" class="selectpicker form-control" data-live-search="true" required>
+                   <option value={{o?.id}} *ngFor="let o of organismes">{{o?.libelle}}</option>
+                 </select>
+               </div>
+             </div>
+            <div class="modal-footer">
+               <button type="button" id="add-formateur-form" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
+               <button [disabled]="addForm.invalid" type="submit" class="btn btn-primary">Enregistrer formateur</button>
+            </div>
+            </form>
+         </div>
+      </div>
+    </div>
+ </div>
+ <!-- Edit Formateur Modal -->
+ <div class="modal fade" id="updateFormateurModal" tabindex="-1" matchType="dialog" aria-labelledby="MatchEditModalLabel" aria-hidden="true">
+   <div class="modal-dialog" matchType="document">
+      <div class="modal-content">
+        <div class="modal-header">
+           <h5 class="modal-title" id="addFormateurModalLabel" style="font-weight: 700;">Ajouter un formateur</h5>
+           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+           <span aria-hidden="true">&times;</span>
+           </button>
+        </div>
+        <div class="modal-body">
+         <form #editForm="ngForm">
+            <input type="hidden" ngModel="{{editFormateur?.id}}" name="id" class="form-control" id="id">
+            <div class="form-row">
+               <div class="form-group col-md-6">
+                 <label for="firstName">Prénom</label>
+                 <input ngModel="{{editFormateur?.firstName}}" type="text" class="form-control" id="firstName" name="firstName" placeholder="Prénom" required>
+               </div>
+               <div class="form-group col-md-6">
+                 <label for="lastName">Nom</label>
+                 <input ngModel="{{editFormateur?.lastName}}" type="text" class="form-control" id="lastName" name="lastName" placeholder="Nom"  required>
+               </div>
+             </div>
+             <div class="form-row">
+               <div class="form-group col-md-6">
+                  <label for="tel">uméro téléphone</label>
+                  <input ngModel="{{editFormateur?.tel}}"  type="text" class="form-control" id="tel" name="tel" placeholder="Numéro téléphone" required>
+                </div>
+                <div class="form-group col-md-6">
+                  <label for="email">Email</label>
+                  <input  ngModel="{{editFormateur?.email}}"  type="email" class="form-control" id="email" name="email" placeholder="Email du formateur" required>
+                </div>
+            </div>
+             <div class="form-row">
+                <div class="form-group col-md-6">
+                   <label for="type">Type du formateur</label>
+                   <input ngModel="{{editFormateur?.type}}"  type="text" class="form-control" id="type" name="type" placeholder="Type du formateur" required>
+                 </div>
+                 <div class="form-group col-md-9">
+                  <label for="organisme">Organisme</label>
+                  <select name="organismes" id="organismes" class="selectpicker form-control" data-live-search="true">
+                    <option value={{o?.id}} *ngFor="let o of organismes">{{o?.libelle}}</option>
+                  </select>
+                </div>
+            </div>
+           <div class="modal-footer">
+              <button type="button" id="add-formateur-form" class="btn btn-secondary" data-dismiss="modal">Close</button>
+              <button (click)="onUpdateFormateur(editForm.value)" data-dismiss="modal" type="submit" class="btn btn-primary">Mettre à jour le profile du formateur</button>
+           </div>
+           </form>
+        </div>
+     </div>
+   </div>
+</div>
+ <!-- Delete Formateur Modal -->
+ <div class="modal fade" id="deleteFormateurModal" tabindex="-1" FormateurType="dialog" aria-labelledby="deleteModelLabel" aria-hidden="true">
+    <div class="modal-dialog" formateurType="document">
+       <div class="modal-content">
+          <div class="modal-header">
+             <h5 class="modal-title" id="deleteModelLabel">Effacer utilisateur</h5>
+             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+             <span aria-hidden="true">&times;</span>
+             </button>
+          </div>
+          <div class="modal-body">
+             <p>Vous êtes sûr de vouloir supprimer le formateur ? {{deleteFormateur?.firstName}}  {{deleteFormateur?.lastName}}  </p>
+             <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
+                <button (click)="onDeleteFormateur(deleteFormateur.id)" class="btn btn-danger" data-dismiss="modal">Yes</button>
+             </div>
+          </div>
+       </div>
+    </div>
+  </div>
+
+  <div class="container">
+   <div class="row">
+     <div class="col-2">
+     </div>
+     <div class="col-8">
+  <div *ngIf="formateurs?.length == 0">
+   <div class="alert alert-info" role="alert">
+     <h4 class="alert-heading">Pas de formateur</h4>
+     <p>Pas de formateur <button (click)="onOpenModal(null, 'add')" class=" btnAdd" style="margin-top: 2%; margin-right: 2%; margin-left: 2%; border-radius: 8%; background-color: rgb(243, 178, 0);"><i class="fas fa-plus"></i>Ajouter un formateur</button></p>
+   </div>
+   </div>
+</div>
+<div class="col-2">
+</div>
+

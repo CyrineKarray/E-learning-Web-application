@@ -1,0 +1,222 @@
+<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
+<link
+  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css"
+  rel="stylesheet"
+/>
+<!-- Google Fonts -->
+<link
+  href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap"
+  rel="stylesheet"
+/>
+<!-- MDB -->
+<link
+  href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/3.3.0/mdb.min.css"
+  rel="stylesheet"
+/>
+<br>
+<br>
+<br>
+<br>
+
+<div class="container content">
+    <div class="container" id="main-container">
+            <div class="container">
+                <div class="row">
+                    <div class="col-9">
+                    <h2 class="h3 block-title">Listes des formations</h2>
+                      <button class="btn btn-primary btn-lg " type="button" (click)="onOpenModal(null, 'add')" data-toggle="tooltip" data-placement="top" title="Add"><i class="fa fa-plus"></i> Ajouter une formation</button>
+                </div>
+                    <div class="col-3">
+              <form class="form-inline ">
+                <div class="input-group rounded">
+                <input type="search" (ngModelChange)="searchFormations(key.value)" #key="ngModel" ngModel
+                 name="key" id="searchName" class="form-control mr-sm-2" placeholder="Recherche..." required>   <span class="input-group-text border-0" id="search-addon">
+                    <i class="fas fa-search"></i>
+                  </span>
+                </div>
+               </form>
+            </div>
+                </div>
+               </div>
+       <br>
+<div class="row gutters">
+	<div class="col-lg-4 col-md-4 col-sm-12"*ngFor="let formation of formations">
+		<div class="plan-card plan-one">
+			<div class="pricing-header green">
+				<h4 class="plan-title">{{formation.titre}}</h4>
+				<div class="plan-cost">{{formation.budget}} TND</div>
+				<div class="plan-save">{{formation.type}}</div>
+			</div>
+			<ul class="plan-features">
+				<li>{{formation.nb_session}} sessions</li>
+				<li>{{formation.duree}} heures </li>
+				<li>Domaine : {{formation?.domain?.libelle}}</li>
+			</ul>
+			<div class="plan-footer">
+                <div class="row justify-content-center user-social-link">
+                    <ul class="list-inline m-0">
+                        <li class="list-inline-item">
+                            <button class="btn btn-warning btn-lg btn-floating" type="button"  (click)="onOpenModal(formation, 'edit')" data-toggle="tooltip" data-placement="top" title="Edit"><i class="fa fa-edit"></i></button>
+                        </li>
+                        <li class="list-inline-item">
+                            <button class="btn btn-danger btn-lg btn-floating" type="button" (click)="onOpenModal(formation, 'delete')" title="Delete"><i class="fas fa-trash"></i></button>
+                        </li>
+                    </ul>
+                </div>
+			</div>
+		</div>
+	</div>
+</div>
+</div>
+
+<!-- Add Formation Modal -->
+<div class="modal fade" id="addFormationModal" tabindex="-1" FormationType="dialog" aria-labelledby="addFormationModalLabel" aria-hidden="true">
+    <div class="modal-dialog" FormationType="document">
+      <div class="modal-content">
+         <div class="modal-header">
+            <h5 class="modal-title" id="addFormationModalLabel" style="font-weight: 700;">Add a new training</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+            </button>
+         </div>
+         <div class="modal-body">
+            <form  #addForm="ngForm" (ngSubmit)="onAddFormation(addForm)">
+             <div class="form-row">
+                <div class="form-group col-md-6">
+                  <label for="titre">Titre</label>
+                  <input ngModel type="text" class="form-control" id="titre" name="titre" placeholder="Titre" required>
+                </div>
+                <div class="form-group col-md-6">
+                  <label for="type">Type de formation</label>
+                  <select ngModel id="type" name="type" class="form-control" required>
+                    <option>NATIONALE</option>
+                    <option selected>INTERNATIONALE</option>
+                  </select>
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group col-md-6">
+                   <label for="duree">Durée</label>
+                   <input ngModel type="number" class="form-control" id="duree" name="duree" placeholder="Durée" required>
+                 </div>
+                 <div class="form-group col-md-6">
+                   <label for="budget">Coût TND</label>
+                   <input  ngModel type="text" class="form-control" id="budget" name="budget" placeholder="Côut de la formation" required>
+                 </div>
+             </div>
+              <div class="form-row">
+                 <div class="form-group col-md-6">
+                    <label for="type">Nombre de sessions</label>
+                    <input ngModel type="number" class="form-control" id="nb_session" name="nb_session" placeholder="Nombre de sessions" required>
+                  </div>
+             </div>
+             <div class="form-group col-md-9">
+               <label for="domain">Domaine</label>
+               <select ngModel name="domain" id="domain" class="selectpicker form-control" data-live-search="true" required>
+                 <option  *ngFor="let o of domains" value={{o?.id}}>{{o?.libelle}}</option>
+               </select>
+             </div>
+            <div class="modal-footer">
+               <button type="button" id="add-formation-form" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
+               <button [disabled]="addForm.invalid" type="submit" class="btn btn-primary">Enregistrer formation</button>
+            </div>
+            </form>
+         </div>
+      </div>
+    </div>
+ </div>
+ <!-- Edit Formation Modal -->
+ <div class="modal fade" id="updateFormationModal" tabindex="-1" matchType="dialog" aria-labelledby="MatchEditModalLabel" aria-hidden="true">
+   <div class="modal-dialog" matchType="document">
+      <div class="modal-content">
+        <div class="modal-header">
+           <h5 class="modal-title" id="addFormationModalLabel" style="font-weight: 700;">Mettre à jour une formation</h5>
+           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+           <span aria-hidden="true">&times;</span>
+           </button>
+        </div>
+        <div class="modal-body">
+         <form #editForm="ngForm">
+            <input type="hidden" ngModel="{{editFormation?.id}}" name="id" class="form-control" id="id">
+            <div class="form-row">
+               <div class="form-group col-md-6">
+                 <label for="titre">Titre</label>
+                 <input ngModel="{{editFormation?.titre}}" type="text" class="form-control" id="titre" name="titre" placeholder="Titre .." required>
+               </div>
+               <div class="form-group col-md-6">
+                 <label for="type">Type de la formation</label>
+                 <input ngModel="{{editFormation?.type}}" type="text" class="form-control" id="type" name="type" placeholder="type of training"  required>
+               </div>
+             </div>
+             <div class="form-row">
+               <div class="form-group col-md-6">
+                  <label for="duree">Duree</label>
+                  <input ngModel="{{editFormation?.duree}}"  type="text" class="form-control" id="duree" name="duree" placeholder="number of hour" required>
+                </div>
+                <div class="form-group col-md-6">
+                  <label for="budget">budget</label>
+                  <input  ngModel="{{editFormation?.budget}}"  type="budget" class="form-control" id="budget" name="budget" placeholder="training budget" required>
+                </div>
+            </div>
+           <div class="form-row">
+             <div class="form-group col-md-6">
+               <label for="type">Nombre de sessions</label>
+               <input ngModel="{{editFormation?.nb_session}}" ngModel type="number" class="form-control" id="nb_session" name="nb_session" placeholder="number of session" required>
+             </div>
+           </div>
+             <div class="form-row">
+                <div class="form-group col-md-6">
+                   <label for="type">Type de formation</label>
+                   <input ngModel="{{editFormation?.type}}"  type="text" class="form-control" id="type" name="type" placeholder="Type de formation" required>
+                 </div>
+            </div>
+            <div class="form-group col-md-9">
+              <label for="domain">Domaine</label>
+              <select name="domains" id="domains" class="selectpicker form-control" data-live-search="true">
+                <option value={{o?.id}} *ngFor="let o of domains">{{o?.libelle}}</option>
+              </select>
+            </div>
+           <div class="modal-footer">
+              <button type="button" id="add-formation-form" class="btn btn-secondary" data-dismiss="modal">Close</button>
+              <button (click)="onUpdateFormation(editForm.value)" data-dismiss="modal" type="submit" class="btn btn-primary">Edit training</button>
+           </div>
+           </form>
+        </div>
+     </div>
+   </div>
+</div>
+ <!-- Delete Formation Modal -->
+ <div class="modal fade" id="deleteFormationModal" tabindex="-1" FormationType="dialog" aria-labelledby="deleteModelLabel" aria-hidden="true">
+    <div class="modal-dialog" FormationType="document">
+       <div class="modal-content">
+          <div class="modal-header">
+             <h5 class="modal-title" id="deleteModelLabel">Delete training</h5>
+             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+             <span aria-hidden="true">&times;</span>
+             </button>
+          </div>
+          <div class="modal-body">
+             <p>Etes vous sûr de vouloir supprimer la formation {{deleteFormation?.titre}}   </p>
+             <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Non</button>
+                <button (click)="onDeleteFormation(deleteFormation.id)" class="btn btn-danger" data-dismiss="modal">Oui</button>
+             </div>
+          </div>
+       </div>
+    </div>
+  </div>
+
+  <div class="container">
+   <div class="row">
+     <div class="col-2">
+     </div>
+     <div class="col-8">
+  <div *ngIf="formations?.length == 0">
+   <div class="alert alert-info" role="alert">
+     <h4 class="alert-heading">NO training !</h4>
+     <p>No training were found.  <button (click)="onOpenModal(null, 'add')" class=" btnAdd" style="margin-top: 2%; margin-right: 2%; margin-left: 2%; border-radius: 8%; background-color: rgb(243, 178, 0);"><i class="fas fa-plus"></i> Add one</button></p>
+   </div>
+   </div>
+</div>
+<div class="col-2">
+</div>

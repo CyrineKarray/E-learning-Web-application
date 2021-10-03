@@ -1,0 +1,164 @@
+<!-- <div class="col-md-12">
+    <div class="card card-container">
+
+      <form
+        *ngIf="!isSuccessful"
+        name="form"
+        (ngSubmit)="f.form.valid && onSubmit()"
+        #f="ngForm"
+        novalidate
+      >
+        <div class="form-group">
+          <label for="username">Username</label>
+          <input
+            type="text"
+            class="form-control"
+            name="username"
+            [(ngModel)]="form.username"
+            required
+            minlength="3"
+            maxlength="20"
+            #username="ngModel"
+          />
+          <div class="alert-danger" *ngIf="f.submitted && username.invalid">
+            <div *ngIf="username.errors.required">Username is required</div>
+            <div *ngIf="username.errors.minlength">
+              Username must be at least 3 characters
+            </div>
+            <div *ngIf="username.errors.maxlength">
+              Username must be at most 20 characters
+            </div>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="password">Password</label>
+          <input
+            type="password"
+            class="form-control"
+            name="password"
+            [(ngModel)]="form.password"
+            required
+            minlength="6"
+            #password="ngModel"
+          />
+          <div class="alert-danger" *ngIf="f.submitted && password.invalid">
+            <div *ngIf="password.errors.required">Password is required</div>
+            <div *ngIf="password.errors.minlength">
+              Password must be at least 6 characters
+            </div>
+          </div>
+        </div>
+        <div class="form-group">
+          <button class="btn btn-primary btn-block">Sign Up</button>
+        </div>
+
+        <div class="alert alert-warning" *ngIf="f.submitted && isSignUpFailed">
+          Signup failed!<br />{{ errorMessage }}
+        </div>
+      </form>
+
+      <div class="alert alert-success" *ngIf="isSuccessful">
+        Your registration is successful!
+      </div>
+    </div>
+  </div> -->
+<div class="overlay">
+  <div class="container register">
+    <div class="row">
+      <div class="col-md-3 register-left">
+        <img
+          src="https://i.pinimg.com/originals/fa/c0/6e/fac06ee1b438475917ce55ead113886d.png"
+          alt=""
+        />
+        <h3>Bienvenue</h3>
+        <p>Créez un compte en 10 secondes et débutez!</p>
+        <a [routerLink]="['/login']">
+          <input type="submit" name="" value="Connectez vous" /></a
+        ><br />
+      </div>
+      <div class="col-md-9 register-right">
+        <div class="tab-content" id="myTabContent">
+          <div
+            class="tab-pane fade show active"
+            id="home"
+            role="tabpanel"
+            aria-labelledby="home-tab"
+          >
+            <form
+              name="form"
+              (ngSubmit)="f.form.valid && onSubmit()"
+              #f="ngForm"
+              novalidate
+            >
+              <div
+                class="alert alert-warning"
+                *ngIf="f.submitted && isSignUpFailed"
+              >
+                Signup failed!<br />{{ errorMessage }}
+              </div>
+              <div class="alert alert-success" *ngIf="isSuccessful">
+                Inscription effecutée avec succès!
+              </div>
+              <h3 class="register-heading">
+                Veulliez remplir ce formulaire pour s'inscrire!
+              </h3>
+              <div class="row register-form">
+                <div class="col-md-8" style="margin-left: 20%">
+                  <label>Nom d'utilisateur:</label>
+                  <input
+                    name="username"
+                    required
+                    #username="ngModel"
+                    [(ngModel)]="form.username"
+                    type="text"
+                    class="form-control"
+                    placeholder="Votre nom d'utilisateur *"
+                    value=""
+                  />
+                  <div
+                    class="alert-danger"
+                    *ngIf="f.submitted && username.invalid"
+                  >
+                    <div *ngIf="username.errors?.required">
+                      Le nom d'utilisteur est obligatoire.
+                    </div>
+                  </div>
+                </div>
+                <div
+                  class="form-group col-md-8"
+                  style="margin-left: 20%; margin-top: 5%"
+                >
+                  <label>Mot de passe:</label>
+                  <input
+                    name="password"
+                    [(ngModel)]="form.password"
+                    required
+                    #password="ngModel"
+                    type="password"
+                    class="form-control"
+                    placeholder="Votre mot de passe *"
+                    value=""
+                  />
+                  <div
+                    class="alert-danger"
+                    *ngIf="f.submitted && password.invalid"
+                  >
+                    <div *ngIf="password.errors?.required">
+                      Le mot de passe est obligatoire.
+                    </div>
+                  </div>
+                </div>
+                <input
+                  [disabled]="f.invalid"
+                  type="submit"
+                  class="btnRegister"
+                  value="S'inscrire"
+                />
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

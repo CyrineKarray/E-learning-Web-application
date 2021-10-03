@@ -1,0 +1,120 @@
+<!-- Tableau -->
+
+<div class="container" id="main-container">
+   <h3>
+      La liste  des domaines
+      
+  </h3>
+  <br>
+    <button (click)="onOpenModal(null, 'add')" class="btn btn-outline-primary">
+      <i class="fas fa-plus"></i>&nbsp;
+      Ajouter un domaines
+    </button>
+    <br>
+ 
+    <table class="table table-fluid" id="example" >
+            <thead>
+            <tr>
+                <th scope="col">ID</th>
+                <th scope="col">Libellé</th>
+                <th scope="col">Actions</th>
+ 
+                
+            </tr>
+            </thead>
+            <tbody>
+             <tr *ngFor = "let domain of domains">
+                 <th scope="row">{{domain.id}}</th>
+                 <td>{{domain?.libelle}}</td>
+                 <td><button (click)="onOpenModal(domain, 'edit')" class="btn btn-outline-primary"><i class="fas fa-edit"></i></button>&nbsp;
+                   <button (click)="onOpenModal(domain, 'delete')" class="btn btn-outline-danger"><i class="fa fa-trash"></i></button></td>
+             </tr>
+             </tbody>
+     </table>
+  
+  </div>
+ 
+  <!-- Add domain Modal -->
+  <div class="modal fade" id="addDomainModal" tabindex="-1" role="dialog" aria-labelledby="addDomainModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+         <div class="modal-header">
+            <h5 class="modal-title" id="addDomainModalLabel" style="font-weight: 700;">Ajouter un nouveau domaine</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+            </button>
+         </div>
+         <div class="modal-body">
+            <form #addForm="ngForm" (ngSubmit)="onAddDomain(addForm)">
+             <div class="form-row">
+                <div class="form-group col-md-6">
+                  <label for="libelle">Libellé</label>
+                  <input ngModel type="text" class="form-control" id="libelle" name="libelle" placeholder="Libellé" required>
+                </div>
+              </div>
+            
+            
+            <div class="modal-footer">
+               <button type="button" id="add-domain-form" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
+               <button [disabled]="addForm.invalid" type="submit" class="btn btn-primary" >Sauvegarder</button>
+            </div>
+            </form>
+         </div>
+      </div>
+    </div>
+  </div>
+  <!-- Update User Modal -->
+  
+  <div class="modal fade" id="updateDomainModal" tabindex="-1" role="dialog" aria-labelledby="domainEditModalLabel" aria-hidden="true">
+     <div class="modal-dialog" role="document">
+        <div class="modal-content">
+           <div class="modal-header">
+              <h5 class="modal-title" id="domainEditModalLabel">Modifier le domaine {{editDomain?.libelle}}</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+              </button>
+           </div>
+           <div class="modal-body">
+              <form #editForm="ngForm">
+  
+                 <input type="hidden" ngModel="{{editDomain?.id}}" name="id" class="form-control" id="id" placeholder="Email">
+                 <div class="form-row">
+                    <div class="form-group col-md-6">
+                      <label for="libelle">Libellé</label>
+                      <input ngModel ngModel="{{editDomain?.libelle}}" type="text" class="form-control" id="libelle" name="libelle" placeholder="Libellé" required>
+                    </div>
+                   
+                  </div>
+                  
+                 <div class="modal-footer">
+                    <button type="button" id="" data-dismiss="modal" class="btn btn-secondary">Fermer</button>
+                    <button (click)="onUpdateDomain(editDomain?.id,editForm.value)" data-dismiss="modal" class="btn btn-primary" >Sauvegarder</button>
+                 </div>
+              </form>
+           </div>
+        </div>
+     </div>
+  </div>
+  
+  
+  <!-- Delete User Modal -->
+  <!-- Delete User Modal -->
+  <div class="modal fade" id="deleteDomainModal" tabindex="-1" role="dialog" aria-labelledby="deleteModelLabel" aria-hidden="true">
+     <div class="modal-dialog" role="document">
+        <div class="modal-content">
+           <div class="modal-header">
+              <h5 class="modal-title" id="deleteModelLabel">Supprimer un domaine</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+              </button>
+           </div>
+           <div class="modal-body">
+              <p>êtes vous sur de vouloir supprimer le domaine {{deleteDomain?.libelle}} ?</p>
+              <div class="modal-footer">
+                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Non</button>
+                 <button (click)="onDeleteDomain(deleteDomain?.id)" class="btn btn-danger" data-dismiss="modal">Oui</button>
+              </div>
+           </div>
+        </div>
+     </div>
+   </div>

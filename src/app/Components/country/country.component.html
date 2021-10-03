@@ -1,0 +1,146 @@
+<!-- Tableau -->
+<div class="container" id="main-container">
+   <h3>
+      La liste  des pays
+      
+  </h3>
+  <br>
+    <button (click)="onOpenModal(null, 'add')" class="btn btn-outline-primary">
+      <i class="fas fa-plus"></i>&nbsp;
+      Ajouter un pays
+    </button>
+    <br>
+
+
+   <table class="table table-fluid" id="example" >
+           <thead>
+           <tr>
+               <th scope="col">ID</th>
+               <th scope="col">Nom</th>
+               <th scope="col">Drapeau</th>
+               <th scope="col">Actions</th>
+               
+
+               
+           </tr>
+           </thead>
+            <tbody>
+            <tr *ngFor = "let country of countries">
+                <th scope="row">{{country.id}}</th>
+                <td>{{country?.name}}</td>
+                <td><button (click)="onOpenModal(country, 'flag')" class="btn btn-outline-secondary"><i class="fas fa-flag"></i></button></td>
+                <td><button (click)="onOpenModal(country, 'edit')" class="btn btn-outline-primary"><i class="fas fa-edit"></i></button>&nbsp;
+                  <button (click)="onOpenModal(country, 'delete')" class="btn btn-outline-danger"><i class="fa fa-trash"></i></button></td>
+            </tr>
+            </tbody>
+    </table>
+
+</div>
+
+<!-- Add country Modal -->
+<div class="modal fade" id="addCountryModal" tabindex="-1" role="dialog" aria-labelledby="addCountryModalLabel" aria-hidden="true">
+   <div class="modal-dialog" role="document">
+     <div class="modal-content">
+        <div class="modal-header">
+           <h5 class="modal-title" id="addCountryModalLabel" style="font-weight: 700;">Ajouter un nouveau pays</h5>
+           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+           <span aria-hidden="true">&times;</span>
+           </button>
+        </div>
+        <div class="modal-body">
+           <form #addForm="ngForm" (ngSubmit)="onAddCountry(addForm)">
+            <div class="form-row">
+               <div class="form-group col-md-6">
+                 <label for="name">Nom</label>
+                 <input ngModel type="text" class="form-control" id="name" name="name" placeholder="Nom" required>
+               </div>
+             </div>
+             <div class="custom-file">
+               <input ngModel (change)="onFileChanged($event)" name="flag" type="file" class="custom-file-input" id="customFile" required>
+               <label class="custom-file-label" for="customFile">Drapeau</label>
+            </div>
+           
+           
+           <div class="modal-footer">
+              <button type="button" id="add-country-form" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
+              <button [disabled]="addForm.invalid" type="submit" class="btn btn-primary" >Sauvegarder</button>
+           </div>
+           </form>
+        </div>
+     </div>
+   </div>
+</div>
+<!-- Update country Modal -->
+
+<div class="modal fade" id="updateCountryModal" tabindex="-1" role="dialog" aria-labelledby="countryEditModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+       <div class="modal-content">
+          <div class="modal-header">
+             <h5 class="modal-title" id="countryEditModalLabel">Modifier le pays {{editCountry?.name}}</h5>
+             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+             <span aria-hidden="true">&times;</span>
+             </button>
+          </div>
+          <div class="modal-body">
+             <form #editForm="ngForm">
+ 
+                <input type="hidden" ngModel="{{editCountry?.id}}" name="id" class="form-control" id="id" placeholder="Email">
+                <div class="form-row">
+                   <div class="form-group col-md-6">
+                     <label for="name">Nom</label>
+                     <input ngModel ngModel="{{editCountry?.name}}" type="text" class="form-control" id="name" name="name" placeholder="Nom" required>
+                   </div>
+                   <div class="custom-file">
+                     <input ngModel (change)="onFileChanged($event)" name="flag" type="file" class="custom-file-input" id="customFile" required>
+                     <label class="custom-file-label" for="customFile">Drapeau</label>
+                  </div>
+                  
+                 </div>
+                 
+                <div class="modal-footer">
+                   <button type="button" id="" data-dismiss="modal" class="btn btn-secondary">Fermer</button>
+                   <button (click)="onUpdateCountry(editCountry?.id,editForm.value)" data-dismiss="modal" class="btn btn-primary" >Sauvegarder</button>
+                </div>
+             </form>
+          </div>
+       </div>
+    </div>
+ </div>
+
+
+<!-- Delete country Modal -->
+<div class="modal fade" id="deleteCountryIdModal" tabindex="-1" role="dialog" aria-labelledby="deleteModelLabel" aria-hidden="true">
+   <div class="modal-dialog" role="document">
+      <div class="modal-content">
+         <div class="modal-header">
+            <h5 class="modal-title" id="deleteModelLabel">Supprimer un pays</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+            </button>
+         </div>
+         <div class="modal-body">
+            <p>êtes vous sur de vouloir supprimer le pays {{deleteCountry?.name}} ?</p>
+            <div class="modal-footer">
+               <button type="button" class="btn btn-secondary" data-dismiss="modal">Non</button>
+               <button (click)="onDeleteCountry(deleteCountry?.id)" class="btn btn-danger" data-dismiss="modal">Oui</button>
+            </div>
+         </div>
+      </div>
+   </div>
+ </div>
+
+
+ <div class="modal fade" id="flagCountryModal" tabindex="-1" role="dialog" aria-labelledby="flagCountryModalLabel" aria-hidden="true">
+   <div class="modal-dialog" role="document">
+     <div class="modal-content">
+       <div class="modal-header">
+         <h5 class="modal-title" id="flagCountryModalLabel" style="font-weight: 700;">{{flagCountry?.name}}</h5>
+         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+           <span aria-hidden="true">&times;</span>
+         </button>
+       </div>
+         <img src="{{flagCountry?.flag}}" alt="" >
+
+     </div>
+   </div>
+ </div>

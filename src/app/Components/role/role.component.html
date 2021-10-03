@@ -1,0 +1,133 @@
+<!-- Tableau -->
+<div class="container" id="main-container">
+    <h3>
+        La liste  des rôles
+        
+    </h3>
+    <br>
+      <button (click)="onOpenModal(null, 'add')" class="btn btn-outline-primary">
+        <i class="fas fa-plus"></i>&nbsp;
+        Ajouter un rôle
+      </button>
+      <br>
+ 
+    <table class="table table-fluid" id="example" >
+            <thead>
+            <tr>
+                <th scope="col">ID</th>
+                <th scope="col">Nom</th>
+                <th scope="col">Actions</th>
+ 
+                
+            </tr>
+            </thead>
+             <tbody>
+             <tr *ngFor = "let role of roles">
+                 <th scope="row">{{role.id}}</th>
+                 <td>{{role?.name}}</td>
+                 <td><button (click)="onOpenModal(role, 'edit')" class="btn btn-outline-primary"><i class="fas fa-edit"></i></button>&nbsp;
+                   <button (click)="onOpenModal(role, 'delete')" class="btn btn-outline-danger"><i class="fa fa-trash"></i></button></td>
+             </tr>
+             </tbody>
+     </table>
+ 
+ </div>
+ 
+ <!-- Add role Modal -->
+ <div class="modal fade" id="addRoleModal" tabindex="-1" role="dialog" aria-labelledby="addRoleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+         <div class="modal-header">
+            <h5 class="modal-title" id="addRoleModalLabel" style="font-weight: 700;">Ajouter un nouveau rôle</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+            </button>
+         </div>
+         <div class="modal-body">
+            <form #addForm="ngForm" (ngSubmit)="onAddRole(addForm)">
+             <div class="form-row">
+                <div class="form-group col-md-6">
+                    <label for="name">Rôle</label>
+                    <select ngModel id="name" name="name" class="form-control" required>
+                      <option >ADMIN</option>
+                      <option selected>USER</option>
+                      <option >MODERATOR</option>
+                    </select>
+                  </div>
+              </div>
+            
+            
+            <div class="modal-footer">
+               <button type="button" id="add-role-form" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
+               <button [disabled]="addForm.invalid" type="submit" class="btn btn-primary" >Sauvegarder</button>
+            </div>
+            </form>
+         </div>
+      </div>
+    </div>
+ </div>
+ <!-- Update role Modal -->
+ 
+ <div class="modal fade" id="updateRoleModal" tabindex="-1" role="dialog" aria-labelledby="roleEditModalLabel" aria-hidden="true">
+     <div class="modal-dialog" role="document">
+        <div class="modal-content">
+           <div class="modal-header">
+              <h5 class="modal-title" id="roleEditModalLabel">Modifier le rôle {{editRole?.name}}</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+              </button>
+           </div>
+           <div class="modal-body">
+              <form #editForm="ngForm">
+  
+                 <input type="hidden" ngModel="{{editRole?.id}}" name="id" class="form-control" id="id" placeholder="Email">
+                 <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label for="name">Rôle</label>
+                        <select ngModel ngModel="{{editRole?.name}}" id="name" name="name" class="form-control" required>
+                          <option selected>ADMIN</option>
+                          <option >USER</option>
+                          <option >MODERATOR</option>
+
+                        </select>
+                      </div>
+                   
+                  </div>
+                  
+                 <div class="modal-footer">
+                    <button type="button" id="" data-dismiss="modal" class="btn btn-secondary">Fermer</button>
+                    <button (click)="onUpdateRole(editRole?.id,editForm.value)" data-dismiss="modal" class="btn btn-primary" >Sauvegarder</button>
+                 </div>
+              </form>
+           </div>
+        </div>
+     </div>
+  </div>
+ 
+ 
+ <!-- Delete role Modal -->
+ <div class="modal fade" id="deleteRoleModal" tabindex="-1" role="dialog" aria-labelledby="deleteModelLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+       <div class="modal-content">
+          <div class="modal-header">
+             <h5 class="modal-title" id="deleteModelLabel">Supprimer un rôle</h5>
+             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+             <span aria-hidden="true">&times;</span>
+             </button>
+          </div>
+          <div class="modal-body">
+             <p>êtes vous sur de vouloir supprimer le rôle {{deleteRole?.name}} ?</p>
+             <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Non</button>
+                <button (click)="onDeleteRole(deleteRole?.id)" class="btn btn-danger" data-dismiss="modal">Oui</button>
+             </div>
+          </div>
+       </div>
+    </div>
+  </div>
+
+
+
+  
+  
+    

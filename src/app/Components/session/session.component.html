@@ -1,0 +1,214 @@
+
+
+
+<div class="container" id="main-container">
+<div class="mt-5 text-center d-flex flex-column">
+  <h1 class="text-center">La liste totale des sessions</h1>
+  <button type="button" (click)="onOpenModal(null,'add')" class="btn btn-outline-primary w-25 align-self-center mt-5 mb-5" data-bs-toggle="modal" data-bs-target="#addSessionModal"><i class="fas fa-plus"></i> Ajouter une session</button>
+<table  id="example" class="table table-striped table-bordered" style="width:100%">
+  <thead>
+  <tr>
+    <th>ID</th>
+    <th>Lieu</th>
+    <th>Nombre de participants</th>
+    <th>Date début</th>
+    <th>Date fin</th>
+    <th>Formateur</th>
+    <th>Organisme</th>
+    <th>Participants</th>
+    <th>Actions</th>
+  </tr>
+  </thead>
+  <tbody>
+      <tr *ngFor="let session of sessions">
+        <th scope="row">{{session.id}}</th>
+        <td>{{session?.lieu}}</td>
+        <td>{{session?.nbrParticipants}}</td>
+        <td>{{session?.dateDeb}}</td>
+        <td>{{session?.dateFin}}</td>
+        <td>{{session?.formateur?.firstName}}</td>
+        <td>{{session?.organisme?.libelle}}</td>
+        <td><button (click)="onOpenModal(session?.id, 'details')" class="btn btn-outline-info"><i class="fas fa-info-circle"></i></button></td>
+        <td>
+          <button (click)="onOpenModal(session, 'edit')" class="btn btn-outline-success mr-3" data-bs-toggle="modal" data-bs-target="#editSessionModal"><i class="far fa-edit"></i></button>
+          <button (click)="onOpenModal(session,'delete')" class="btn btn-outline-danger"><i class="far fa-trash-alt"></i></button>
+        </td>
+      </tr>
+  </tbody>
+</table>
+</div>
+  <div class="modal fade" id="addSessionModal" tabindex="-1" role="dialog" aria-labelledby="addSessionModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="addSessionModalLabel" style="font-weight: 700;">Ajouter une nouvelle session</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <form #addForm="ngForm" (ngSubmit)="onAddSession(addForm)">
+            <div class="form-row">
+              <div class="form-group col-md-6">
+                <label for="lieu">Lieu</label>
+                <input ngModel type="text" class="form-control" id="lieu" name="lieu" placeholder="Lieu" required>
+              </div>
+              <div class="form-group col-md-6">
+                <label for="nbParticipant">Nombre de participant</label>
+                <input ngModel type="number" class="form-control" id="nbParticipant" name="nbParticipant" placeholder="Nombre de participant" required>
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group col-md-6">
+                <label for="dateDeb">Date de début</label>
+                <input ngModel type="date" class="form-control" id="dateDeb" name="dateDeb" placeholder="Date début" required>
+              </div>
+              <div class="form-group col-md-6">
+                <label for="dateFin">Date de fin/label></label>
+                <input ngModel type="date" class="form-control" id="dateFin" name="dateFin" placeholder="Date fin" required>
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group col-md-9">
+                <label for="organisme">Organisme</label>
+                <select ngModel name="organisme" id="organisme" class="selectpicker form-control" data-live-search="true" required>
+                  <option  *ngFor="let o of organismes" value={{o?.id}}>{{o?.libelle}}</option>
+                </select>
+              </div>
+              <div class="form-group col-md-9">
+                <label for="formation">Formation</label>
+                <select ngModel ngModel id="formation" name="formation" class="form-control selectpicker" data-live-search="true" required>
+                  <option *ngFor="let formation of formations"  value={{formation?.id}}>{{formation?.titre}}</option>
+                </select>
+              </div>
+              <div class="form-group col-md-9">
+                <label for="formateur">Formateur</label>
+                <select ngModel ngModel id="formateur" name="formateur" class="form-control selectpicker" data-live-search="true" required>
+                  <option *ngFor="let f of formateurs"  value={{f?.id}}>{{f?.firstName}} {{f?.lastName}}</option>
+                </select>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button type="button" id="add-session-form" class="btn btn-secondary" data-dismiss="modal">Close</button>
+              <button [disabled]="addForm.invalid" type="submit" class="btn btn-primary" >Save changes</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- update modal -->
+  <div class="modal fade" id="editSessionModal" tabindex="-1" role="dialog" aria-labelledby="editSessionModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="editSessionModalLabel" style="font-weight: 700;">Mettre à jour une session</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <form #editForm="ngForm">
+            <input type="hidden" ngModel="{{editSession?.id}}" name="id" class="form-control" id="id" placeholder="Email">
+            <div class="form-row">
+              <div class="form-group col-md-6">
+                <label for="lieu">Lieu</label>
+                <input ngModel ngModel="{{editSession?.lieu}}" type="text" class="form-control" id="lieu" name="lieu" placeholder="Lieu" required>
+              </div>
+              <div class="form-group col-md-6">
+                <label for="nbrParticipants">Nombre de participant</label>
+                <input ngModel ngModel="{{editSession?.nbrParticipants}}" type="number" class="form-control" id="nbrParticipants" name="nbrParticipants" placeholder="Nombre de participant" required>
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group col-md-6">
+                <label for="dateDeb">Date de début</label>
+                <input ngModel ngModel="{{editSession?.dateDeb}}" type="date" class="form-control" id="dateDeb" name="dateDeb" placeholder="Date début" required>
+              </div>
+              <div class="form-group col-md-6">
+                <label for="dateFin">Date de fin</label>
+                <input ngModel ngModel="{{editSession?.dateFin}}" type="date" class="form-control" id="dateFin" name="dateFin" placeholder="Date fin" required>
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group col-md-9">
+                <label for="organisme">Organisme</label>
+                <select name="organismes" id="organismes" class="selectpicker form-control" data-live-search="true">
+                  <option value={{o?.id}} *ngFor="let o of organismes">{{o?.libelle}}</option>
+                </select>
+              </div>
+              <div class="form-group col-md-9">
+                <label for="formation">Formation</label>
+                <select ngModel ngModel id="formation" name="formation" class="form-control selectpicker" data-live-search="true" required>
+                  <option *ngFor="let formation of formations"  value={{formation?.id}}>{{formation?.titre}}</option>
+                </select>
+              </div>
+              <div class="form-group col-md-9">
+                <label for="formateur">Formateur</label>
+                <select ngModel ngModel id="formateur" name="formateur" class="form-control selectpicker" data-live-search="true" required>
+                  <option *ngFor="let f of formateurs"  value={{f?.id}}>{{f?.firstName}} {{f?.lastName}}</option>
+                </select>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button type="button" id="" class="btn btn-secondary" data-dismiss="modal">Close</button>
+              <button (click)="onUpdateSession(editForm.value)" data-dismiss="modal" class="btn btn-primary" >Save changes</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- delete Modal -->
+  <div class="modal fade" id="deleteSessionModal" tabindex="-1" role="dialog" aria-labelledby="deleteSessionModelLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="deleteSessionModelLabel">Delete User</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <p>Etes vous sur de vouloire supprimer cette sessio?</p>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
+            <button (click)="onDeleteSession(deleteSession?.id)" class="btn btn-danger" data-dismiss="modal">Yes</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- Participants Modal -->
+<div class="modal fade bd-example-modal-lg" id="participantDetailsModal" tabindex="-1" role="dialog" aria-labelledby="participantDetailsModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+     <div class="modal-content">
+        <div class="modal-header">
+           <h5 class="modal-title" id="participantDetailsModalLabel">Les participants de cette session:</h5>
+           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+           </button>
+     </div>
+        <div class="modal-body">
+          <div class="card"  *ngFor = "let p of participantsForSession">
+              <div class="card-header">
+                <b> Participant ID: {{p?.id}} </b>
+              </div>
+              <div class="card-body">
+                <blockquote class="blockquote mb-0">
+                  <p><b> Prénom:</b> {{p?.firstName}} | <b> Nom:</b> {{p?.lastName}}</p>
+                  <p><b> Email:</b> {{p?.email}} | <b> Tel:</b> {{p?.tel}}   </p>
+                  <p><b> Profil:</b> {{p?.profile?.libelle}} | <b> Pays:</b> {{p?.country?.name}}   </p>
+                  <footer class="blockquote-footer">Type: <cite title="Source Title">{{p?.type}}</cite></footer>
+                </blockquote>
+              </div>
+          </div>
+       </div>
+     </div>
+    </div>
+  </div>
